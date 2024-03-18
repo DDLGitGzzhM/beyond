@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"fmt"
 
 	"beyond/application/user/rpc/internal/svc"
 	"beyond/application/user/rpc/service"
@@ -24,7 +25,20 @@ func NewFindByMobileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Find
 }
 
 func (l *FindByMobileLogic) FindByMobile(in *service.FindByMobileRequest) (*service.FindByMobileResponse, error) {
-	// todo: add your logic here and delete this line
+	fmt.Println("in FindByMobile")
+	user, err := l.svcCtx.UserModel.FindByMobile(l.ctx, in.Mobile)
+	if err != nil {
+		logx.Errorf("FindByMobile mobile: %s error: %v", in.Mobile, err)
+		return nil, err
+	}
+	fmt.Println("out FindByMobile")
+	if user == nil {
+		return &service.FindByMobileResponse{}, nil
+	}
 
-	return &service.FindByMobileResponse{}, nil
+	return &service.FindByMobileResponse{
+		UserId:   user.Id,
+		Username: user.Username,
+		Avatar:   user.Avatar,
+	}, nil
 }

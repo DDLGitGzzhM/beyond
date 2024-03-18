@@ -1,7 +1,10 @@
 package logic
 
 import (
+	"beyond/application/user/rpc/internal/model"
 	"context"
+	"fmt"
+	"time"
 
 	"beyond/application/user/rpc/internal/svc"
 	"beyond/application/user/rpc/service"
@@ -24,7 +27,22 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(in *service.RegisterRequest) (*service.RegisterResponse, error) {
-	// todo: add your logic here and delete this line
-
-	return &service.RegisterResponse{}, nil
+	fmt.Println("in Register")
+	ret, err := l.svcCtx.UserModel.Insert(l.ctx, &model.User{
+		Username:   in.Username,
+		Mobile:     in.Mobile,
+		Avatar:     in.Avatar,
+		CreateTime: time.Now(),
+		UpdateTime: time.Now(),
+	})
+	if err != nil {
+		logx.Errorf("Register req: %v error: %v", in, err)
+		return nil, err
+	}
+	userId, err := ret.LastInsertId()
+	if err != nil {
+		logx.Errorf("LastInsertId error: %v", err)
+		return nil, err
+	}
+	return &service.RegisterResponse{UserId: userId}, nil
 }
