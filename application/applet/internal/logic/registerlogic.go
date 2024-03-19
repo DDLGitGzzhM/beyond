@@ -7,6 +7,7 @@ import (
 	"beyond/pkg/jwt"
 	"context"
 	"errors"
+	"github.com/zeromicro/go-zero/core/stores/redis"
 	"strings"
 
 	"beyond/application/applet/internal/svc"
@@ -50,7 +51,7 @@ func (l *RegisterLogic) Register(req *types.RegisterRequest) (resp *types.Regist
 		return nil, code.VerificationCodeEmpty
 	}
 
-	err = l.checkVerificationCode(l.ctx, req.Mobile, req.VerificationCode)
+	err = checkVerificationCode(l.svcCtx.BizRedis, req.Mobile, req.VerificationCode)
 	if err != nil {
 		return nil, err
 	}
@@ -95,21 +96,21 @@ func (l *RegisterLogic) Register(req *types.RegisterRequest) (resp *types.Regist
 
 	return &types.RegisterResponse{
 		UserId: regRet.UserId,
-		Token:  token,
+		Token:  types.Token(token),
 	}, nil
 	return
 }
 
-func (l *RegisterLogic) checkVerificationCode(ctx context.Context, mobile, verificationCode string) error {
-	cacheCode, err := getActivationCache(mobile, l.svcCtx.BizRedis)
+func checkVerificationCode(rds *redis.Redis, mobile, code string) error {
+	cacheCode, err := getActivationCache(mobile, rds)
 	if err != nil {
 		return err
 	}
 	if cacheCode == "" {
-		return code.VerificationCodeExpired
+		return errors.New("verification code expired")
 	}
-	if cacheCode != verificationCode {
-		return code.VerificationCodeFailed
+	if cacheCode != code {
+		return errors.New("verification code failed")
 	}
 
 	return nil
