@@ -94,6 +94,8 @@ func (l *RegisterLogic) Register(req *types.RegisterRequest) (resp *types.Regist
 		return nil, err
 	}
 
+	_ = delActivationCache(req.Mobile, req.VerificationCode, l.svcCtx.BizRedis)
+
 	return &types.RegisterResponse{
 		UserId: regRet.UserId,
 		Token:  types.Token(token),

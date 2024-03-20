@@ -7,6 +7,7 @@ import (
 	"beyond/pkg/jwt"
 	"beyond/pkg/xcode"
 	"context"
+	"fmt"
 	"strings"
 
 	"beyond/application/applet/internal/svc"
@@ -34,6 +35,8 @@ func (l *LoginLogic) Login(req *types.LoginRequest) (resp *types.LoginResponse, 
 	if len(req.Mobile) == 0 {
 		return nil, code.LoginMobileEmpty
 	}
+	fmt.Println("Login :", req.Mobile)
+	fmt.Println("Login :", req.VerificationCode)
 	req.VerificationCode = strings.TrimSpace(req.VerificationCode)
 	if len(req.VerificationCode) == 0 {
 		return nil, code.VerificationCodeEmpty
