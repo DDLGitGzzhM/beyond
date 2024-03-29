@@ -7,6 +7,7 @@ import (
 	"beyond/pkg/jwt"
 	"context"
 	"errors"
+	"fmt"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"strings"
 
@@ -80,8 +81,10 @@ func (l *RegisterLogic) Register(req *types.RegisterRequest) (resp *types.Regist
 		Password: req.Password,
 	})
 	if err != nil {
+		fmt.Println("error :", err)
 		return nil, err
 	}
+	fmt.Println("out")
 
 	token, err := jwt.BuildTokens(jwt.TokenOptions{
 		AccessSecret: l.svcCtx.Config.Auth.AccessSecret,
