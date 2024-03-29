@@ -3,6 +3,7 @@ package svc
 import (
 	"beyond/application/article/rpc/internal/config"
 	"beyond/application/article/rpc/internal/model"
+
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"golang.org/x/sync/singleflight"
@@ -16,7 +17,6 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-
 	rds, err := redis.NewRedis(redis.RedisConf{
 		Host: c.BizRedis.Host,
 		Pass: c.BizRedis.Pass,

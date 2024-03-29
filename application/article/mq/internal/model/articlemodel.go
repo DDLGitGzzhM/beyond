@@ -14,7 +14,6 @@ type (
 	ArticleModel interface {
 		articleModel
 		UpdateLikeNum(ctx context.Context, id, likeNum int64) error
-		withSession(session sqlx.Session) ArticleModel
 	}
 
 	customArticleModel struct {
@@ -27,10 +26,6 @@ func NewArticleModel(conn sqlx.SqlConn) ArticleModel {
 	return &customArticleModel{
 		defaultArticleModel: newArticleModel(conn),
 	}
-}
-
-func (m *customArticleModel) withSession(session sqlx.Session) ArticleModel {
-	return NewArticleModel(sqlx.NewSqlConnFromSession(session))
 }
 
 func (m *customArticleModel) UpdateLikeNum(ctx context.Context, id, likeNum int64) error {

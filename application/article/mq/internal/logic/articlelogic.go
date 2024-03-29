@@ -132,6 +132,7 @@ func (l *ArticleLogic) BatchUpSertToEs(ctx context.Context, data []*types.Articl
 		}
 
 		payload := fmt.Sprintf(`{"doc":%s,"doc_as_upsert":true}`, string(v))
+		fmt.Println("payload :", payload)
 		err = bi.Add(ctx, esutil.BulkIndexerItem{
 			Action:     "update",
 			DocumentID: fmt.Sprintf("%d", d.ArticleId),
@@ -142,6 +143,7 @@ func (l *ArticleLogic) BatchUpSertToEs(ctx context.Context, data []*types.Articl
 			},
 		})
 		if err != nil {
+			panic("error")
 			return err
 		}
 	}

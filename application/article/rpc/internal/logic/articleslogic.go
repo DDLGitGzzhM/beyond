@@ -1,20 +1,22 @@
 package logic
 
 import (
-	"beyond/application/article/rpc/internal/code"
-	"beyond/application/article/rpc/internal/model"
-	"beyond/application/article/rpc/internal/types"
+	"cmp"
 	"context"
 	"fmt"
-	"github.com/zeromicro/go-zero/core/mr"
-	"github.com/zeromicro/go-zero/core/threading"
+	"slices"
 	"strconv"
 	"time"
 
+	"beyond/application/article/rpc/internal/code"
+	"beyond/application/article/rpc/internal/model"
 	"beyond/application/article/rpc/internal/svc"
+	"beyond/application/article/rpc/internal/types"
 	"beyond/application/article/rpc/pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/mr"
+	"github.com/zeromicro/go-zero/core/threading"
 )
 
 const (
@@ -84,6 +86,20 @@ func (l *ArticlesLogic) Articles(in *pb.ArticlesRequest) (*pb.ArticlesResponse, 
 		if err != nil {
 			return nil, err
 		}
+
+		// 通过sortFiled对articles进行排序
+		var cmpFunc func(a, b *model.Article) int
+		if sortField == "like_num" {
+			cmpFunc = func(a, b *model.Article) int {
+				return cmp.Compare(b.LikeNum, a.LikeNum)
+			}
+		} else {
+			cmpFunc = func(a, b *model.Article) int {
+				return cmp.Compare(b.PublishTime.Unix(), a.PublishTime.Unix())
+			}
+		}
+		slices.SortFunc(articles, cmpFunc)
+
 		for _, article := range articles {
 			curPage = append(curPage, &pb.ArticleItem{
 				Id:           article.Id,
@@ -169,6 +185,7 @@ func (l *ArticlesLogic) Articles(in *pb.ArticlesRequest) (*pb.ArticlesResponse, 
 			}
 		})
 	}
+
 	return ret, nil
 }
 
