@@ -22,6 +22,15 @@ var configFile = flag.String("f", "etc/applet-api.yaml", "the config file")
 // checkout
 // pull
 // push
+// blame
+// history
+
+// 缓存当前开发的提交
+// stash
+// IDEA shelf == git patch
+
+// cherry-pick (saas , main , release)
+
 // ---
 // git add ,  git commit , git push
 func main() {
