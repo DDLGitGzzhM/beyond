@@ -19,6 +19,7 @@ import (
 var configFile = flag.String("f", "etc/applet-api.yaml", "the config file")
 
 // branch
+
 // checkout
 // pull
 // push
@@ -30,13 +31,14 @@ var configFile = flag.String("f", "etc/applet-api.yaml", "the config file")
 // IDEA shelf == git patch
 
 // cherry-pick (saas , main , release)
+// merge
+// conflict
+// fetch
+
+//
 
 // ---
 // git add ,  git commit , git push
-// 123123
-// 123123
-// 123123
-// merge conflict test
 func main() {
 	flag.Parse()
 
