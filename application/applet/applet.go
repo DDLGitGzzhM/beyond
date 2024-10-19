@@ -24,6 +24,7 @@ var configFile = flag.String("f", "etc/applet-api.yaml", "the config file")
 // push
 // ---
 // git add ,  git commit , git push
+// merge conflict test
 func main() {
 	flag.Parse()
 
