@@ -36,6 +36,7 @@ var configFile = flag.String("f", "etc/applet-api.yaml", "the config file")
 // 123123
 // 123123
 // 123123
+// merge conflict test
 func main() {
 	flag.Parse()
 
