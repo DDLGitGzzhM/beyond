@@ -1,9 +1,11 @@
 package main
 
 import (
-	"beyond/pkg/xcode"
 	"flag"
 	"fmt"
+
+	"beyond/pkg/xcode"
+
 	"github.com/zeromicro/go-zero/rest/httpx"
 
 	"beyond/application/applet/internal/config"
@@ -16,6 +18,12 @@ import (
 
 var configFile = flag.String("f", "etc/applet-api.yaml", "the config file")
 
+// branch
+// checkout
+// pull
+// push
+// ---
+// git add ,  git commit , git push
 func main() {
 	flag.Parse()
 
